@@ -12,7 +12,7 @@ class Controller(object):
         # TODO: Implement
         self.vehicle_mass = kwargs["vehicle_mass"]
         self.fuel_capacity = kwargs["fuel_capacity"]
-        self.break_deadband = kwargs["break_deadband"]
+        self.brake_deadband = kwargs["brake_deadband"]
         self.decel_limit = kwargs["decel_limit"]
         self.accel_limit = kwargs["accel_limit"]
         self.wheel_radius = kwargs["wheel_radius"]
