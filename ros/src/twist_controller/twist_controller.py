@@ -9,7 +9,6 @@ ONE_MPH = 0.44704
 
 class Controller(object):
     def __init__(self, *args, **kwargs):
-        # TODO: Implement
         self.vehicle_mass = kwargs["vehicle_mass"]
         self.fuel_capacity = kwargs["fuel_capacity"]
         self.brake_deadband = kwargs["brake_deadband"]
