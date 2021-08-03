@@ -92,7 +92,7 @@ class DBWNode(object):
         rate = rospy.Rate(50)  # 50Hz
         while not rospy.is_shutdown():
             # You should only publish the control commands if dbw is enabled
-            if None in (self.throttle, self.brake, self.steering):
+            if not None in (self.throttle, self.brake, self.steering):
                 self.throttle, self.brake, self.steering = self.controller.control(self.current_vel,
                                                                                    self.dbw_enabled,
                                                                                    self.linear_vel,

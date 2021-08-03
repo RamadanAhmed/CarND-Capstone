@@ -20,6 +20,8 @@ class TLDetector(object):
 
         self.pose = None
         self.waypoints = None
+        self.waypoints_2d = None
+        self.waypoints_tree = None
         self.camera_image = None
         self.lights = []
 
@@ -49,8 +51,7 @@ class TLDetector(object):
         self.last_state = TrafficLight.UNKNOWN
         self.last_wp = -1
         self.state_count = 0
-        self.waypoints_2d = None
-        self.waypoints = None
+        
         rospy.spin()
 
     def pose_cb(self, msg):
