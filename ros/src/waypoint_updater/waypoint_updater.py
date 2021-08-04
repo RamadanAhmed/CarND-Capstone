@@ -28,27 +28,28 @@ MAX_DECEL = .5
 class WaypointUpdater(object):
     def __init__(self):
         rospy.init_node('waypoint_updater')
-
-        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size = 2)
-        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb, queue_size = 8)
-        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
-
-        self.final_waypoints_pub = rospy.Publisher(
-            'final_waypoints', Lane, queue_size=1)
-
-        # TODO: Add other member variables you need below
+        
         self.base_lane = None
         self.pose = None
         self.stopline_wp_idx = -1
         self.waypoints_2d = None
         self.waypoints_tree = None
 
+        rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
+        rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
+
+        self.final_waypoints_pub = rospy.Publisher(
+            'final_waypoints', Lane, queue_size=1)
+
         self.loop()
 
     def loop(self):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
-            if self.pose and self.base_lane:
+            if self.pose != None and self.base_lane != None:
+                rospy.loginfo('base_lane initialized {}'.format(self.base_lane))
+                rospy.loginfo('pose initialized {}'.format(self.pose))
                 # get closet waypoints
                 self.publish_waypoints()
             rate.sleep()
@@ -108,15 +109,14 @@ class WaypointUpdater(object):
         self.base_lane = waypoints
         if not self.waypoints_2d:
             self.waypoints_2d = [[waypoint.pose.pose.position.x,
-                                  waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
+                                    waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoints_tree = KDTree(self.waypoints_2d)
+            rospy.loginfo('waypoints_2d initialized {}'.format(self.waypoints_2d))
 
     def traffic_cb(self, msg):
-        # TODO: Callback for /traffic_waypoint message. Implement
         self.stopline_wp_idx = msg.data
 
     def obstacle_cb(self, msg):
-        # TODO: Callback for /obstacle_waypoint message. We will implement it later
         pass
 
     def get_waypoint_velocity(self, waypoint):
